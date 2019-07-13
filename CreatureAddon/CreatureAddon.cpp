@@ -52,21 +52,21 @@ std::string MakeConnectionString()
 
 struct CreatureAddon
 {
-	uint32 guid;
+    uint32 guid;
     uint32 patch;
-	uint32 creatureId;
-	uint32 mount;
-	uint32 bytes1;
-	uint32 b2_0_sheath;
-	uint32 b2_1_flags;
-	uint32 emote;
-	uint32 moveflags;
-	std::string auras;
-	bool operator==(const CreatureAddon &an) const
-	{
-		return mount == an.mount && bytes1 == an.bytes1 && b2_0_sheath == an.b2_0_sheath && b2_1_flags == an.b2_1_flags &&
-			   emote == an.emote && moveflags == an.moveflags && auras == an.auras;
-	}
+    uint32 creatureId;
+    uint32 mount;
+    uint32 bytes1;
+    uint32 b2_0_sheath;
+    uint32 b2_1_flags;
+    uint32 emote;
+    uint32 moveflags;
+    std::string auras;
+    bool operator==(const CreatureAddon &an) const
+    {
+        return mount == an.mount && bytes1 == an.bytes1 && b2_0_sheath == an.b2_0_sheath && b2_1_flags == an.b2_1_flags &&
+               emote == an.emote && moveflags == an.moveflags && auras == an.auras;
+    }
 };
 
 std::vector<CreatureAddon> vAddonEntry;
@@ -76,12 +76,12 @@ std::unordered_map<uint32, uint32> mPatches;
 
 CreatureAddon* FindAddonByEntry(uint32 entry)
 {
-	for (auto& itr : vAddonEntry)
-	{
-		if (itr.creatureId == entry)
-			return &itr;
-	}
-	return nullptr;
+    for (auto& itr : vAddonEntry)
+    {
+        if (itr.creatureId == entry)
+            return &itr;
+    }
+    return nullptr;
 }
 
 CreatureAddon* FindAddonByGuid(uint32 guid)
@@ -105,7 +105,7 @@ int main()
         printf("\nError: Cannot connect to database!\n");
         getchar();
         return 1;
-    }	
+    }    
 
     printf("Loading addon by entry.\n");
     if (std::shared_ptr<QueryResult> result = GameDb.Query("SELECT * FROM `creature_template_addon`"))
@@ -114,60 +114,60 @@ int main()
         {
             DbField* pFields = result->fetchCurrentRow();
 
-			CreatureAddon newEntry;
-			newEntry.creatureId = pFields[0].getUInt32();
+            CreatureAddon newEntry;
+            newEntry.creatureId = pFields[0].getUInt32();
             newEntry.patch = pFields[1].getUInt32();
-			newEntry.mount = pFields[2].getUInt32();
-			newEntry.bytes1 = pFields[3].getUInt32();
-			newEntry.b2_0_sheath = pFields[4].getUInt32();
-			newEntry.b2_1_flags = pFields[5].getUInt32();
-			newEntry.emote = pFields[6].getUInt32();
-			newEntry.moveflags = pFields[7].getUInt32();
-			newEntry.auras = pFields[8].getCppString();
+            newEntry.mount = pFields[2].getUInt32();
+            newEntry.bytes1 = pFields[3].getUInt32();
+            newEntry.b2_0_sheath = pFields[4].getUInt32();
+            newEntry.b2_1_flags = pFields[5].getUInt32();
+            newEntry.emote = pFields[6].getUInt32();
+            newEntry.moveflags = pFields[7].getUInt32();
+            newEntry.auras = pFields[8].getCppString();
 
-			vAddonEntry.push_back(newEntry);
+            vAddonEntry.push_back(newEntry);
         } while (result->NextRow());
     }
-	printf("Loaded %u rows.\n", vAddonEntry.size());
+    printf("Loaded %u rows.\n", vAddonEntry.size());
 
-	printf("Loading creature spawn data.\n");
-	if (std::shared_ptr<QueryResult> result = GameDb.Query("SELECT `guid`, `id` FROM `creature`"))
-	{
-		do
-		{
-			DbField* pFields = result->fetchCurrentRow();
+    printf("Loading creature spawn data.\n");
+    if (std::shared_ptr<QueryResult> result = GameDb.Query("SELECT `guid`, `id` FROM `creature`"))
+    {
+        do
+        {
+            DbField* pFields = result->fetchCurrentRow();
 
-			uint32 guid = pFields[0].getUInt32();
-			uint32 id = pFields[1].getUInt32();
+            uint32 guid = pFields[0].getUInt32();
+            uint32 id = pFields[1].getUInt32();
 
-			mSpawns.insert(std::make_pair(guid, id));
-		} while (result->NextRow());
-	}
-	printf("Loaded %u rows.\n", mSpawns.size());
+            mSpawns.insert(std::make_pair(guid, id));
+        } while (result->NextRow());
+    }
+    printf("Loaded %u rows.\n", mSpawns.size());
 
-	printf("Loading addon by guid.\n");
-	if (std::shared_ptr<QueryResult> result = GameDb.Query("SELECT * FROM `creature_addon`"))
-	{
-		do
-		{
-			DbField* pFields = result->fetchCurrentRow();
+    printf("Loading addon by guid.\n");
+    if (std::shared_ptr<QueryResult> result = GameDb.Query("SELECT * FROM `creature_addon`"))
+    {
+        do
+        {
+            DbField* pFields = result->fetchCurrentRow();
 
-			CreatureAddon newEntry;
-			newEntry.guid = pFields[0].getUInt32();
-			newEntry.creatureId = mSpawns.find(newEntry.guid)->second;
+            CreatureAddon newEntry;
+            newEntry.guid = pFields[0].getUInt32();
+            newEntry.creatureId = mSpawns.find(newEntry.guid)->second;
             newEntry.patch = pFields[1].getUInt32();
-			newEntry.mount = pFields[2].getUInt32();
-			newEntry.bytes1 = pFields[3].getUInt32();
-			newEntry.b2_0_sheath = pFields[4].getUInt32();
-			newEntry.b2_1_flags = pFields[5].getUInt32();
-			newEntry.emote = pFields[6].getUInt32();
-			newEntry.moveflags = pFields[7].getUInt32();
-			newEntry.auras = pFields[8].getCppString();
+            newEntry.mount = pFields[2].getUInt32();
+            newEntry.bytes1 = pFields[3].getUInt32();
+            newEntry.b2_0_sheath = pFields[4].getUInt32();
+            newEntry.b2_1_flags = pFields[5].getUInt32();
+            newEntry.emote = pFields[6].getUInt32();
+            newEntry.moveflags = pFields[7].getUInt32();
+            newEntry.auras = pFields[8].getCppString();
 
-			vAddonGuid.push_back(newEntry);
-		} while (result->NextRow());
-	}
-	printf("Loaded %u rows.\n", vAddonGuid.size());
+            vAddonGuid.push_back(newEntry);
+        } while (result->NextRow());
+    }
+    printf("Loaded %u rows.\n", vAddonGuid.size());
 
     printf("Loading minimum patch for creatures.\n");
     if (std::shared_ptr<QueryResult> result = GameDb.Query("SELECT `entry`, min(`patch`) FROM `creature_template` GROUP BY `entry`"))
@@ -191,7 +191,7 @@ int main()
     std::set<uint32> guidsToDelete;
     std::unordered_map<uint32, std::vector<CreatureAddon>> guidOnlyAddons;
 
-	for (auto const& i : vAddonGuid)
+    for (auto const& i : vAddonGuid)
     {
         if (CreatureAddon* addonByEntry = FindAddonByEntry(i.creatureId))
         {
